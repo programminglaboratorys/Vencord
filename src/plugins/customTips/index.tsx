@@ -39,17 +39,32 @@ function settingsCustomTipsComponent() {
 const settings = definePluginSettings({
     OnlyCustom: {
         type: OptionType.BOOLEAN,
-        description: "only show the custom tips",
-        default: false,
+        description: "Only show the custom tips",
+        default: false
+    },
+    replaceEvents: {
+        description: "Replace Event Quotes too",
+        type: OptionType.BOOLEAN,
+        default: false
+    },
+    OnlyCustomEvents: {
+        type: OptionType.BOOLEAN,
+        description: "Only show the custom tips",
+        default: false
     },
     CustomTips: {
         type: OptionType.COMPONENT,
         description: "Custom Tips",
         default: "you can add Custom Tips in the customTips plugin settings!",
-        component: settingsCustomTipsComponent,
+        component: settingsCustomTipsComponent
     }
 });
 
+
+function random(TipsArray: Array<string | Array<string | object>>): string | Array<string | object> {
+    if (!TipsArray) return "";
+    return TipsArray[Math.floor(Math.random() * (TipsArray.length - 1))];
+}
 
 
 function processTips(TipsArray: Array<string | Array<string | object>>): Array<string | Array<string | object>> {
@@ -57,6 +72,11 @@ function processTips(TipsArray: Array<string | Array<string | object>>): Array<s
     return settings.store.OnlyCustom && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
 }
 
+function proccessEventTips(TipsArray: Array<string | Array<string | object>> | null): Array<string | Array<string | object>> {
+    if (!TipsArray) TipsArray = [];
+    let CustomTips: Array<string> = settings.store.CustomTips.trim().split("\n");
+    return settings.store.OnlyCustomEvents && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
+}
 
 
 export default definePlugin({
@@ -70,10 +90,22 @@ export default definePlugin({
             find: "this,\"_loadingText\",function()",
             replacement: {
                 match: /(let (\i)=(\[(.*?)\];))/,
-                replace: "$1 $2=$self.processTips($2);" // let e=[...]; e=processTips(e);
+                replace: "$1 $2=$self.processTips($2); return $self.random($2);" // let e=[...]; e=processTips(e); return random(e);
             }
+        },
+        {
+            find: "this,\"_eventLoadingText\",function()",
+            replacement: {
+                match: /(let (\i)=(\i\.default\.getLoadingTips\(\)));/,
+                replace: "let $2=$self.proccessEventTips($3);" // let e=proccessEventTips(C.default.getLoadingTips());
+            },
+            predicate: () => settings.store.replaceEvents
         }
     ],
     processTips: processTips,
+    random: random,
+    proccessEventTips: proccessEventTips,
     startAt: StartAt.Init
 });
+
+
