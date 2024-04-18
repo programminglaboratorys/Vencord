@@ -1,0 +1,76 @@
+
+.cookies-counter {
+    margin-left: 37%;
+    font-size: 150%;
+    font-weight: bold;
+    display: flex;
+}
+
+.cookie-button { /* the big cookie */
+    height: 60%;
+    width: 55%;
+    border-radius: 60%;
+    margin-left: calc(498px/4)/*25%*/;
+    background-image: url('https://raw.githubusercontent.com/programminglaboratorys/resources/main/Vencord.cookieClicker/cookie.svg');
+    background-repeat: no-repeat;
+    color: inherit !important;
+    background-color: inherit !important;
+    transition: all 0.3s ease; /* Add a transition effect on hover */
+}
+
+.cookie-button:focus {
+    width: 60%;
+}
+
+.cookie-button:hover {
+    transform: scale(1.05); /* Increase the size of the button by 5% on hover */
+}
+
+.upgrades-panel {
+    margin-left: 20%;
+    margin-top: 2%;
+}
+
+.upgrade-button {
+    display: inline !important;
+    margin-right: 1% !important;
+}
+
+
+.text-popup {
+    position: absolute;
+    z-index: 9999;
+    white-space: nowrap;
+    color: white;
+    font-size: 150%;
+    pointer-events: none; /* non-interactive */
+    user-select: none; /* Standard syntax */
+    -moz-user-select: none; /* Firefox */
+    -webkit-user-select: none; /* Chrome, Safari, and Opera */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.cookie {
+    position: absolute;
+    z-index: 9999;
+    width: 70px;
+    height: 70px;
+    background-image: url('https://raw.githubusercontent.com/programminglaboratorys/resources/main/Vencord.cookieClicker/popcookie.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    animation: beat 1.2s ease-in-out 0s infinite both;
+    user-select: none; /* Standard syntax */
+    -moz-user-select: none; /* Firefox */
+    -webkit-user-select: none; /* Chrome, Safari, and Opera */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    -webkit-touch-callout: none; /* IDK anymore, need sleep.. */
+}
+
+.cookie-per-second {
+    font-size: 80%;
+    display: flex;
+    margin-left: 41%;
+    margin-bottom: 2%;
+    opacity: 0.5;
+}
