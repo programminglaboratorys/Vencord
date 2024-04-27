@@ -27,7 +27,7 @@ function AppendButton(props: { code: CodeBlock; context: object; }) {
 }
 
 export default definePlugin({
-    name: "quickSnippet",
+    name: "QuickSnippet",
     description: "append css snippets quickly to quickCss with one click!",
     authors: [Devs.iamme],
     patches: [
