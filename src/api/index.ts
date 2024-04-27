@@ -31,7 +31,7 @@ import * as $Notifications from "./Notifications";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
 import * as $Styles from "./Styles";
-import * as $Tablists from "./Tablists";
+import * as $Tablist from "./Tablist";
 
 /**
  * An API allowing you to listen to Message Clicks or run your own logic
@@ -113,6 +113,6 @@ export const ContextMenu = $ContextMenu;
 export const ChatButtons = $ChatButtons;
 
 /**
- * An API allowing you to add tabs to the tablist
-*/
-export const Tablists = $Tablists;
+ * An API allowing you to add panels to the expression picker
+ */
+export const Tablist = $Tablist;
