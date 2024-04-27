@@ -39,6 +39,7 @@ function AppendButton(props: { code: CodeBlock; context: Context; }) {
     const { code, context } = props;
     if (code.lang.toLowerCase() !== "css" || !settings.store.whitelistChannels.includes(context.channelId)) return null;
     const [appended, setAppended] = useState(false);
+
     return <Button
         look={ButtonLooks.INVERTED}
         onClick={() => {
