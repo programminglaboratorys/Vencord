@@ -59,7 +59,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
-    animation: beat 1.2s ease-in-out 0s infinite both;
+    animation: beat 2s ease-in-out 0s infinite both;
     user-select: none; /* Standard syntax */
     -moz-user-select: none; /* Firefox */
     -webkit-user-select: none; /* Chrome, Safari, and Opera */
@@ -73,4 +73,11 @@
     margin-left: 41%;
     margin-bottom: 2%;
     opacity: 0.5;
+}
+
+
+@keyframes beat {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95) rotate(45deg); }
+    100% { transform: scale(1) rotate(0deg); }
 }

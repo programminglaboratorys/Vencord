@@ -7,7 +7,7 @@
 import "./style.css";
 
 import { definePluginSettings } from "@api/Settings";
-import { addTab, removeTab, TabPanelComponent } from "@api/Tablists";
+import { addTablistButton, removeTablistButton, TablistPanelProps } from "@api/Tablist";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
@@ -137,40 +137,6 @@ function goldenCookie() {
         }, 0);
         popupText(ev, `+${cookiesToAdd} COOKIES`);
         if (cookie.parentNode) cookie.parentNode.removeChild(cookie);
-        /*
-        const numStars = Math.floor(Math.random() * ((2 + 1))) + 3;s
-        let lastStar: HTMLDivElement | null = null;
-        for (let i = 0; i < numStars; i++) {
-            const star = document.createElement("div");
-            star.classList.add("star");
-            star.style.opacity = "1";
-            let x = 0;
-            let y = 0;
-            if (!lastStar) {
-                x = Math.round(parseInt(cookie.style.left.slice(0, -2)) + Math.random() * 70 - 5);;
-                y = Math.round(parseInt(cookie.style.top.slice(0, -2)) + Math.random() * 70 - 5);
-            }
-            else if (lastStar) {
-                x = Math.round(parseInt(cookie.style.left.slice(0, -2)) + Math.random() * 30 + 5);
-                y = Math.round(parseInt(cookie.style.top.slice(0, -2)) + Math.random() * 30 + 5);
-            }
-
-            star.style.left = `${x}px`;
-            star.style.top = `${y}px`;
-            lastStar = star;
-            document.body.appendChild(star);
-            const fadeOut = function () {
-                const opacity = parseFloat(star.style.opacity);
-                if (opacity > 0) {
-                    star.style.opacity = (opacity - 0.002).toFixed(3);
-                } else {
-                    star.remove();
-                    return;
-                }
-                requestAnimationFrame(fadeOut);
-            };
-            setTimeout(() => requestAnimationFrame(fadeOut), 0);
-        }*/
     });
     document.body.appendChild(cookie);
 }
@@ -226,16 +192,13 @@ function giveCookiesPerSecond() {
     }
     updateCookiesCounter();
     if (settings.store.allowGoldenCookie && Math.floor(Math.random() * 10000) === 0) { // 1000 is the chance
-        //const randomGoldenCookie = Math.floor(Math.random() * goldenPopupChance); // 1
-        //if (randomGoldenCookie === 0) {
         goldenCookie();
-        //}
     }
     setTimeout(giveCookiesPerSecond, 1000);
 }
 
-// Mi4wNTJ8fDE3MTI0NTI2NTg5OTE7MTcxMjQ1MjM3ODY4MjsxNzEyNzI2MTA5NjI3O01jU3BhZ2hldHRpO2t2eHV1OzAsMSwwLDAsMCwwLDB8MTExMTExMDExMDAxMDEwMDAxMDEwMTEwMDAxfDEyNDgyODUyLjM5NzMyMzc4NzsxMjc5ODYzMC4zOTczMjcwNjI7ODkzOzI7MjE4NTs0NzswOzA7MjU7MDswOzA7MDswOzA7MjswOzA7MDswOzA7MDs7MDswOzA7MDswOzA7MDstMTstMTstMTstMTstMTswOzA7MDswOzc1OzA7MDstMTstMTsxNzEyNDUyMzc4NjgxOzA7MDs7NDE7MDswOzY2NC44OzUwOzA7MDt8MzIsMzIsMjc3OTU2LDAsLDAsMzI7MTksMTksMTQ2NzY4MCwwLCwwLDE5OzcsNywxMTY0Mzc2LDAsLDAsNzswLDAsMCwwLCwwLDA7MiwyLDk4NTU2NDYsMCwwLDAsTmFOOzAsMCwwLDAsLDAsMDswLDAsMCwwLCwwLDA7MCwwLDAsMCwsMCwwOzAsMCwwLDAsLDAsMDswLDAsMCwwLCwwLDA7MCwwLDAsMCwsMCwwOzAsMCwwLDAsLDAsMDswLDAsMCwwLCwwLDA7MCwwLDAsMCwsMCwwOzAsMCwwLDAsLDAsMDswLDAsMCwwLCwwLDA7MCwwLDAsMCwsMCwwOzAsMCwwLDAsLDAsMDswLDAsMCwwLCwwLDA7MCwwLDAsMCwsMCwwO3wxMTExMTAxMDAwMDAwMDExMTEwMDEwMTAwMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEwMDAxMDEwMTAxMDEwMDAxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEwMTAxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwfDExMTEwMDAwMDAwMDAwMDAxMTEwMDAwMDAwMDAwMDEwMDAxMTAwMDAxMDAxMDAxMDAwMDAwMDAwMDAwMDAwMDAwMDAxMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDB8fA%3D%3D%21END%21
-function CookiePanelComponent(props: TabPanelComponent) {
+
+function CookiePanelComponent(props: TablistPanelProps) {
     return (
         <div style={{ color: "white" }}>
             <span className={"cookies-counter"} id="cookie-title">Cookies {Game.cookies}</span>
@@ -311,19 +274,18 @@ export default definePlugin({
     name: "cookieClicker",
     description: "cookie clicker in discord! just open the tab list and click on the cookie",
     authors: [Devs.iamme],
-    dependencies: ["TabApi"],
+    dependencies: ["TablistApi"],
     settings: settings,
     start: async () => {
-        // addTab("better", "Betters", (props: TabPanelComponent) => (<div>hello</div>), false);
         logger.info("<[ Here to cheat or debug? ]>");
-        addTab("cookie", "Cookie", CookiePanelComponent, false);
+        addTablistButton("cookie", "Cookie", CookiePanelComponent, false);
         init();
         giveCookiesPerSecond();
         autoSaver();
     },
 
     stop: async () => {
-        removeTab("cookie");
+        removeTablistButton("cookie");
         Game.save();
     }
 });
