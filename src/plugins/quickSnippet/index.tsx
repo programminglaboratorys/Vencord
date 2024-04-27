@@ -3,23 +3,49 @@
  * Copyright (c) 2024 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
+import { definePluginSettings } from "@api/Settings";
 import "./style.css";
 import { Devs } from "@utils/constants";
-import definePlugin from "@utils/types";
-import { Button, ButtonLooks, useState } from "@webpack/common";
+import { getCurrentChannel } from "@utils/discord";
+import definePlugin, { OptionType } from "@utils/types";
+import { Button, ButtonLooks, useState, MessageStore } from "@webpack/common";
+
+const settings = definePluginSettings({
+    whitelistChannels: {
+        type: OptionType.STRING,
+        description: "list of channel IDs to ignore",
+        default: "1032200195582197831, 1028106818368589824"
+    },
+    descriptions: {
+        type: OptionType.BOOLEAN,
+        description: "whether to add descriptions to code snippets in the quick css",
+        default: true
+    }
+});
 
 interface CodeBlock {
     lang: string;
     content: string;
 }
-function AppendButton(props: { code: CodeBlock; context: object; }) {
-    const { code } = props;
-    if (code.lang.toLowerCase() !== "css") return null;
+interface Context {
+    channelId: string;
+    messageId: string;
+}
+
+function trimCodeBlocks(str: string) {
+    return str.replace(/(```[\n\W\w\s\t\d\D\B\b]+```)/g, '').trim();
+}
+function AppendButton(props: { code: CodeBlock; context: Context; }) {
+    const { code, context } = props;
+    if (code.lang.toLowerCase() !== "css" || !settings.store.whitelistChannels.includes(context.channelId)) return null;
     const [appended, setAppended] = useState(false);
     return <Button
         look={ButtonLooks.INVERTED}
         onClick={() => {
-            VencordNative.quickCss.get().then(r => VencordNative.quickCss.set(r + "\n\n" + code.content));
+            const message = MessageStore.getMessage(context.channelId, context.messageId);
+            const trimedMessage = trimCodeBlocks(message.content);
+            const description = trimedMessage && settings.store.descriptions ? `/* \n${trimedMessage}\n */\n` : "";
+            VencordNative.quickCss.get().then(r => VencordNative.quickCss.set(r + "\n\n" + description + code.content));
             setAppended(true);
         }}
         className="qs-quickcss-append-button"
@@ -30,6 +56,7 @@ export default definePlugin({
     name: "QuickSnippet",
     description: "append css snippets quickly to quickCss with one click!",
     authors: [Devs.iamme],
+    settings: settings,
     patches: [
         {
             find: "codeBlock:{react(",
@@ -39,5 +66,5 @@ export default definePlugin({
             }
         }
     ],
-    AppendButton: (code: CodeBlock, context: object) => <AppendButton code={code} context={context} />
+    AppendButton: (code: CodeBlock, context: Context) => <AppendButton code={code} context={context} />
 });
