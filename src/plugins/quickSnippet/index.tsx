@@ -6,7 +6,6 @@
 import { definePluginSettings } from "@api/Settings";
 import "./style.css";
 import { Devs } from "@utils/constants";
-import { getCurrentChannel } from "@utils/discord";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ButtonLooks, useState, MessageStore } from "@webpack/common";
 
@@ -32,9 +31,25 @@ interface Context {
     messageId: string;
 }
 
+
 function trimCodeBlocks(str: string) {
-    return str.replace(/(```[\n\W\w\s\t\d\D\B\b]+```)/g, '').trim();
+    let index = 0;
+    let output = "";
+    while (index < str.length) {
+        const char = str[index];
+        if (char === '`') {
+            let match = Vencord.Webpack.wreq(428595).default.RULES.codeBlock.match(str.slice(index));
+            if (match) {
+                index = index + (match[0].length);
+            }
+        } else {
+            output += char;
+        }
+        index++;
+    }
+    return output;
 }
+
 function AppendButton(props: { code: CodeBlock; context: Context; }) {
     const { code, context } = props;
     if (code.lang.toLowerCase() !== "css" || !settings.store.whitelistChannels.includes(context.channelId)) return null;
