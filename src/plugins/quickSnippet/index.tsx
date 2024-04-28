@@ -8,6 +8,7 @@ import "./style.css";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, ButtonLooks, useState, MessageStore } from "@webpack/common";
+import { wreq } from "@webpack";
 
 const settings = definePluginSettings({
     whitelistChannels: {
@@ -38,7 +39,7 @@ function trimCodeBlocks(str: string) {
     while (index < str.length) {
         const char = str[index];
         if (char === '`') {
-            let match = Vencord.Webpack.wreq(428595).default.RULES.codeBlock.match(str.slice(index));
+            let match = wreq(428595).default.RULES.codeBlock.match(str.slice(index));
             if (match) {
                 index = index + (match[0].length);
             }
