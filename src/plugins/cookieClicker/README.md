@@ -1,18 +1,21 @@
+# this plugin is won't be maintained, prs are welcome
 
 cookieClicker uses a custom api to add itself to the emoji panel as the image below shows
 
 ![cookieClicker Preview](cookieClickerPreview.png)
+
 # How to install CookieClicker and the api
 
 this [commit](https://github.com/Vendicated/Vencord/commit/603467b5c2eb155e49861544a700dedbb91109fb) tells you the changes made to add this plugin.
 
 if you can't figure it out with the commit.
+
 ### follow this method
 
 I made a python script to automatically download the commit. make sure to have python installed and requests with `python -m pip install requests`
 
-
 even who doesn't have knowledge in programming should be able to read this
+
 ```py
 import requests
 from pathlib import Path
@@ -41,7 +44,9 @@ for url_path in urls:
         print(f"Failed to download {url_path}, try again to avoid problems")
 input("enter to exit:")
 ```
+
 where you need to run this file? in the root folder of Vencord folder beside the src file. the folder tree should looks like this
+
 ```py
 Vencord
 ├── CODE_OF_CONDUCT.md
@@ -62,12 +67,13 @@ Vencord
 ```
 
 than run the python file, click it twice or run it in terminal
+
 ```py
 C:/Users/Cookie/desktop/Vencord>python downloader.py
 ```
 
-
 than follow the [Vencord installation guide](https://github.com/programminglaboratorys/Vencord/blob/main/docs/1_INSTALLING.md)
 
 # TODO
-- someone can restart to create new threeads to make endless cookies (fix or never) 🗿
+
+-   someone can restart to create new threeads to make endless cookies (fix or never) 🗿
