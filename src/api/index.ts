@@ -26,12 +26,13 @@ import * as $MessageAccessories from "./MessageAccessories";
 import * as $MessageDecorations from "./MessageDecorations";
 import * as $MessageEventsAPI from "./MessageEvents";
 import * as $MessagePopover from "./MessagePopover";
+import * as $MessageUpdater from "./MessageUpdater";
 import * as $Notices from "./Notices";
 import * as $Notifications from "./Notifications";
 import * as $ServerList from "./ServerList";
 import * as $Settings from "./Settings";
+import * as $SettingsStores from "./SettingsStores";
 import * as $Styles from "./Styles";
-import * as $Tablist from "./Tablist";
 
 /**
  * An API allowing you to listen to Message Clicks or run your own logic
@@ -113,6 +114,8 @@ export const ContextMenu = $ContextMenu;
 export const ChatButtons = $ChatButtons;
 
 /**
- * An API allowing you to add panels to the expression picker
+ * An API allowing you to update and re-render messages
  */
-export const Tablist = $Tablist;
+export const MessageUpdater = $MessageUpdater;
+
+export const SettingsStores = $SettingsStores;
