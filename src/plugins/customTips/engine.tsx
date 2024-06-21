@@ -8,7 +8,7 @@ import { ChannelStore, GuildStore, SelectedChannelStore, SelectedGuildStore, Use
 
 export const regex = /^\${([\w.]+)(\(([\w\d()]+)?\)([\w.]+)?)?}/i;
 
-export const rules = { // <string, [() => any, Array<string>, boolean]>
+export const rules = { // <string, [() => any, Array<string>, boolean|undefined]>
     "user": [() => UserStore.getCurrentUser(), ["name", "username", "discriminator", "id"]],
     "current_channel": [() => SelectedChannelStore.getChannelId(), ["name", "id"]],
     "current_guild": [() => SelectedGuildStore.getGuildId(), ["name", "id"]],

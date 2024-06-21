@@ -4,17 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { definePluginSettings } from "@api/Settings";
 import { Link } from "@components/Link";
-import { Devs } from "@utils/constants";
-import definePlugin, { OptionType, StartAt } from "@utils/types";
-import { Text, TextArea, useEffect, useState } from "@webpack/common";
+import definePlugin, { StartAt } from "@utils/types";
+import { Text, TextArea, useMemo, useState } from "@webpack/common";
 
 import { parse } from "./engine";
-
+import { settings } from "./settings";
 function settingsAboutComponent() {
     return (<Text>
-        Add custom tips for your discord! planning to add custom variables later!
+        Add custom tips for your discord! docs soon!
         if you want custom loading icon look <Link href="https://discord.com/channels/1015060230222131221/1028106818368589824/1223837351831277590">here</Link>
     </Text>);
 }
@@ -22,7 +20,7 @@ function settingsAboutComponent() {
 function SettingsBoxComponent(props: { setting: string; placeholder: string; }) {
     const [inputValue, setInputValue] = useState(settings.store[props.setting]);
 
-    useEffect(() => {
+    useMemo(() => {
         settings.store[props.setting] = inputValue;
     }, [inputValue]);
 
@@ -37,31 +35,6 @@ function SettingsBoxComponent(props: { setting: string; placeholder: string; }) 
 function settingsCustomTipsComponent() {
     return <SettingsBoxComponent setting="CustomTips" placeholder="Custom Tips (type every tip in a new line)"></SettingsBoxComponent>;
 }
-
-const settings = definePluginSettings({
-    OnlyCustom: {
-        type: OptionType.BOOLEAN,
-        description: "Only show the custom tips",
-        default: false
-    },
-    replaceEvents: {
-        description: "Replace Event Quotes too",
-        type: OptionType.BOOLEAN,
-        default: false
-    },
-    OnlyCustomEvents: {
-        type: OptionType.BOOLEAN,
-        description: "Only show the custom tips",
-        default: false
-    },
-    CustomTips: {
-        type: OptionType.COMPONENT,
-        description: "Custom Tips",
-        default: "you can add Custom Tips in the customTips plugin settings!",
-        component: settingsCustomTipsComponent
-    }
-});
-
 
 function random(TipsArray: Array<string | Array<string | object>>): string | Array<string | object> {
     if (!TipsArray) return "";
@@ -83,7 +56,7 @@ function processTips(type: "tips" | "events", TipsArray: Array<string | Array<st
 export default definePlugin({
     name: "CustomTips",
     description: "append custom tips",
-    authors: [Devs.iamme],
+    authors: [],
     settings: settings,
     settingsAboutComponent: settingsAboutComponent,
     patches: [
