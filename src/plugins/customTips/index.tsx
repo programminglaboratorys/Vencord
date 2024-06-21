@@ -10,6 +10,8 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
 import { Text, TextArea, useEffect, useState } from "@webpack/common";
 
+import { parse } from "./engine";
+
 function settingsAboutComponent() {
     return (<Text>
         Add custom tips for your discord! planning to add custom variables later!
@@ -67,20 +69,19 @@ function random(TipsArray: Array<string | Array<string | object>>): string | Arr
 }
 
 
-function processTips(TipsArray: Array<string | Array<string | object>>): Array<string | Array<string | object>> {
-    let CustomTips: Array<string> = settings.store.CustomTips.trim().split("\n");
-    return settings.store.OnlyCustom && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
-}
-
-function proccessEventTips(TipsArray: Array<string | Array<string | object>> | null): Array<string | Array<string | object>> {
+function processTips(type: "tips" | "events", TipsArray: Array<string | Array<string | object>>): Array<string | Array<string | object>> {
     if (!TipsArray) TipsArray = [];
-    let CustomTips: Array<string> = settings.store.CustomTips.trim().split("\n");
-    return settings.store.OnlyCustomEvents && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
+    const CustomTips: Array<string> = (settings.store.CustomTips as string).trim().split("\n").map(t => parse(t.trim()));
+    if (type === "tips") {
+        return settings.store.OnlyCustom && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
+    } else {
+        return settings.store.OnlyCustomEvents && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
+    }
 }
 
 
 export default definePlugin({
-    name: "customTips",
+    name: "CustomTips",
     description: "append custom tips",
     authors: [Devs.iamme],
     settings: settings,
@@ -90,21 +91,20 @@ export default definePlugin({
             find: "this,\"_loadingText\",function()",
             replacement: {
                 match: /(let (\i)=(\[(.*?)\];))/,
-                replace: "$1 $2=$self.processTips($2); return $self.random($2);" // let e=[...]; e=processTips(e); return random(e);
+                replace: "$1 $2=$self.processTips(\"tips\",$2); return $self.random($2);" // let e=[...]; e=processTips("tips",e); return random(e);
             }
         },
         {
             find: "this,\"_eventLoadingText\",function()",
             replacement: {
                 match: /(let (\i)=(\i\.default\.getLoadingTips\(\)));/,
-                replace: "let $2=$self.proccessEventTips($3);" // let e=proccessEventTips(C.default.getLoadingTips());
+                replace: "let $2=$self.processTips(\"events\",$3);" // let e=proccessEventTips("events",C.default.getLoadingTips());
             },
             predicate: () => settings.store.replaceEvents
         }
     ],
     processTips: processTips,
     random: random,
-    proccessEventTips: proccessEventTips,
     startAt: StartAt.Init
 });
 
