@@ -43,7 +43,7 @@ export default definePlugin({
         {
             find: "this,\"_eventLoadingText\",function()",
             replacement: {
-                match: /(let (\i)=(\i\.default\.getLoadingTips\(\)));/,
+                match: /(let (\i)=(\i\.\i\.getLoadingTips\(\)));/,
                 replace: "let $2=$self.processTips(\"events\",$3);" // let e=proccessEventTips("events",C.default.getLoadingTips());
             },
             predicate: () => settings.store.replaceEvents
