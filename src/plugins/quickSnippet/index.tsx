@@ -3,12 +3,16 @@
  * Copyright (c) 2024 Vendicated and contributors
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-import { definePluginSettings } from "@api/Settings";
+
 import "./style.css";
+
+import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, ButtonLooks, useState, MessageStore } from "@webpack/common";
-import { wreq } from "@webpack";
+import { findByPropsLazy } from "@webpack";
+import { Button, ButtonLooks, MessageStore, useState } from "@webpack/common";
+
+const MarkdownRules = findByPropsLazy("RULES", "PROFILE_BIO_RULES");
 
 const settings = definePluginSettings({
     whitelistChannels: {
@@ -37,10 +41,10 @@ function trimCodeBlocks(str: string) {
     let output = "";
     while (index < str.length) {
         const char = str[index];
-        if (char === '`') {
-            let match = wreq(428595).default.RULES.codeBlock.match(str.slice(index));
+        if (MarkdownRules.RULES.codeBlock.requiredFirstCharacters.includes(char)) {
+            const match = MarkdownRules.RULES.codeBlock.match(str.slice(index));
             if (match) {
-                index = index + (match[0].length);
+                index += (match[0].length - 1);
             }
         } else {
             output += char;
@@ -52,7 +56,7 @@ function trimCodeBlocks(str: string) {
 
 function AppendButton(props: { code: CodeBlock; context: Context; }) {
     const { code, context } = props;
-    if (code.lang.toLowerCase() !== "css" || !settings.store.whitelistChannels.includes(context.channelId || "undefined")) return null;
+    if (code.lang.toLowerCase() !== "css" || !settings.store.whitelistChannels.includes(context.channelId || "undefined") && !settings.store.whitelistChannels.includes("all")) return null;
     const [appended, setAppended] = useState(false);
 
     return <Button
@@ -63,7 +67,7 @@ function AppendButton(props: { code: CodeBlock; context: Context; }) {
                 const message = MessageStore.getMessage(context.channelId, context.messageId);
                 trimedMessage = trimCodeBlocks(message.content);
             }
-            const description = trimedMessage && settings.store.descriptions ? `/* \n${trimedMessage}\n */\n` : "";
+            const description = trimedMessage && settings.store.descriptions ? `/* \n${trimedMessage}\n*/\n\n` : "";
             VencordNative.quickCss.get().then(r => VencordNative.quickCss.set(r + "\n\n" + description + code.content));
             setAppended(true);
         }}
