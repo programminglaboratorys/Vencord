@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+/*
+may work on it or may never
 import { debounce } from "@shared/debounce";
 import { getTheme, Theme } from "@utils/discord";
 import { EXTENSION_BASE_URL } from "@utils/web-metadata";
@@ -32,7 +34,7 @@ export const editor = {
     openFile: NOOP_ASYNC,
     async openEditor() {
         const features = `popup,width=${Math.min(window.innerWidth, 1000)},height=${Math.min(window.innerHeight, 1000)}`;
-        const win = window.open("about:blank", "VencordQuickCss", features);
+        const win = window.open("about:blank", "TipsEditor", features);
         if (!win) {
             alert("Failed to open TipEditor popup. Make sure to allow popups!");
             return;
@@ -49,3 +51,4 @@ export const editor = {
         win.document.write(IS_EXTENSION ? monacoHtmlLocal : monacoHtmlCdn);
     },
 };
+*/

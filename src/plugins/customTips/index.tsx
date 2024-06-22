@@ -4,47 +4,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { Link } from "@components/Link";
 import definePlugin, { StartAt } from "@utils/types";
-import { Text, TextArea, useMemo, useState } from "@webpack/common";
 
 import { parse } from "./engine";
-import { settings } from "./settings";
-function settingsAboutComponent() {
-    return (<Text>
-        Add custom tips for your discord! docs soon!
-        if you want custom loading icon look <Link href="https://discord.com/channels/1015060230222131221/1028106818368589824/1223837351831277590">here</Link>
-    </Text>);
-}
+import { settings, settingsAboutComponent } from "./settings";
 
-function SettingsBoxComponent(props: { setting: string; placeholder: string; }) {
-    const [inputValue, setInputValue] = useState(settings.store[props.setting]);
-
-    useMemo(() => {
-        settings.store[props.setting] = inputValue;
-    }, [inputValue]);
-
-    return <TextArea
-        value={inputValue}
-        placeholder={props.placeholder}
-        onChange={setInputValue}
-    >
-    </TextArea>;
-}
-
-function settingsCustomTipsComponent() {
-    return <SettingsBoxComponent setting="CustomTips" placeholder="Custom Tips (type every tip in a new line)"></SettingsBoxComponent>;
-}
-
-function random(TipsArray: Array<string | Array<string | object>>): string | Array<string | object> {
+function random(TipsArray: Array<string | Array<string | JSX.Element> | JSX.Element>): string | Array<string | JSX.Element> | JSX.Element {
     if (!TipsArray) return "";
     return TipsArray[Math.floor(Math.random() * (TipsArray.length - 1))];
 }
 
 
-function processTips(type: "tips" | "events", TipsArray: Array<string | Array<string | object>>): Array<string | Array<string | object>> {
+function processTips(type: "tips" | "events", TipsArray: Array<string | Array<string | JSX.Element> | JSX.Element>): Array<string | Array<string | JSX.Element> | JSX.Element> {
     if (!TipsArray) TipsArray = [];
-    const CustomTips: Array<string> = (settings.store.CustomTips as string).trim().split("\n").map(t => parse(t.trim()));
+    const CustomTips = (settings.store.CustomTips as string).trim().split("\n").map(t => parse(t.trim())) as Array<string | Array<string | JSX.Element> | JSX.Element>;
     if (type === "tips") {
         return settings.store.OnlyCustom && CustomTips.length !== 0 ? CustomTips : [...TipsArray, ...CustomTips];
     } else {
