@@ -19,10 +19,12 @@ function processKeys(keys: string) {
 }
 // object, attrs. callable
 export const rules = { // <string, [() => any, Array<string>, boolean|undefined]>
+
     // those don't work because when discord starts early those veriables aren't initialized yet.
     // lol spent 5 hours creating this engine, welp will be useful on other things ig,
     // you can add other rules if you want example of a role [()=>{"love": "love you too!"}, ["love"]]
     // callable is if the function takes arguments (takes one argument for now)
+
     // "user": [() => UserStore.getCurrentUser(), ["name", "username", "discriminator", "id"]],
     // "current_channel": [() => SelectedChannelStore.getChannelId(), ["name", "id"]],
     // "current_guild": [() => SelectedGuildStore.getGuildId(), ["name", "id"]],
