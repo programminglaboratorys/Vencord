@@ -56,7 +56,7 @@ export default definePlugin({
                         };
                     },
                     react(node: { code: string, content: string, nasted: ASTNode; }, recurseOutput, state) {
-                        return <span style={styleMap[node.code]} key={state.key} id={"mc-" + node.code + ("-" + (state.key ?? ""))}>{recurseOutput(node.nasted, state)}</span>;
+                        return <span style={styleMap[node.code]} key={state.key} id={"mc-" + node.code + (state.key ? "-" + state.key : "")}>{recurseOutput(node.nasted, state)}</span>;
                     }
                 }
             },
