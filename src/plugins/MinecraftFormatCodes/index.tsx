@@ -59,9 +59,6 @@ export default definePlugin({
                         return <span style={styleMap[node.code]} key={state.key} id={"mc-" + node.code + (state.key ? "-" + state.key : "")}>{recurseOutput(node.nasted, state)}</span>;
                     }
                 }
-            },
-            PROFILE_BIO_RULES: {
-                codeBlock: r.RULES.codeBlock
             }
         } as PluginMarkDownRules;
     }
