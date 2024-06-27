@@ -8,20 +8,7 @@ import { MarkDownRules, PluginMarkDownRules } from "@api/Markdown";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ASTNode } from "simple-markdown";
-/*
-                        const text = capture[2];
-                        const nastCaps: SingleASTNode[][] = [];
-                        for (let index = 0; index < capture[1].length; index++) {
-                            const char = capture[2][index];
-                            if (this.requiredFirstCharacters.includes(char)) {
-                                const match = this.match(text.slice(index), state, "");
-                                if (!match) continue;
-                                match;
-                                nastCaps.push(nastedParse(match, state));
-                                break;
-                            }
-                        }
-                            */
+
 var styleMap = {
     "4": { color: "#be0000" },
     "c": { color: "#fe3f3f" },
@@ -69,9 +56,7 @@ export default definePlugin({
                         };
                     },
                     react(node: { code: string, content: string, nasted: ASTNode; }, recurseOutput, state) {
-                        const nas = recurseOutput(node.nasted, state);
-                        console.log("typeof", typeof nas);
-                        return <span style={styleMap[node.code]} key={state.key}>{nas}</span>;
+                        return <span style={styleMap[node.code]} key={state.key} id={"mc-" + node.code + ("-" + (state.key ?? ""))}>{recurseOutput(node.nasted, state)}</span>;
                     }
                 }
             },
