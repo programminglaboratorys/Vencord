@@ -44,9 +44,9 @@ export default definePlugin({
             RULES: {
                 ColorCodes: {
                     order: 25,
-                    requiredFirstCharacters: ["$"],
+                    requiredFirstCharacters: ["&"],
                     match(source, state, prev) {
-                        return /^\$([\w\d])([^$]+)\$r/.exec(source) || /^\$([\w\d])([^$]+)/.exec(source);
+                        return /^&([\w\d])([^&]+)&r/.exec(source) || /^&([\w\d])([^&]+)/.exec(source);
                     },
                     parse(capture, nastedParse, state) {
                         return {
