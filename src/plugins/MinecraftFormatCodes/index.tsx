@@ -9,7 +9,7 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { ASTNode } from "simple-markdown";
 
-var styleMap = {
+var styleMap = { // credit to FoxInFlame for the map
     "4": { color: "#be0000" },
     "c": { color: "#fe3f3f" },
     "6": { color: "#d9a334" },
