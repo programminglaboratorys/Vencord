@@ -46,7 +46,7 @@ export default definePlugin({
                     order: 25,
                     requiredFirstCharacters: ["$"],
                     match(source, state, prev) {
-                        return /^\$([\w\d])([\d\w\W\D]+)\$r/.exec(source) || /^\$([\w\d])([\d\w\W\D]+)/.exec(source);
+                        return /^\$([\w\d])([^$]+)\$r/.exec(source) || /^\$([\w\d])([^$]+)/.exec(source);
                     },
                     parse(capture, nastedParse, state) {
                         return {
