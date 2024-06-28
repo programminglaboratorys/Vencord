@@ -37,8 +37,6 @@ export default definePlugin({
     description: "Adds Minecraft Color Codes (and Format Codes) to markdown",
     authors: [Devs.iamme],
     dependencies: ["MarkdownAPI"],
-    start() {
-    },
     rules(r: MarkDownRules) {
         return {
             RULES: {
