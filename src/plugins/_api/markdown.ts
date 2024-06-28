@@ -5,12 +5,12 @@
  */
 
 import { Devs } from "@utils/constants";
-import definePlugin, { StartAt } from "@utils/types";
+import definePlugin from "@utils/types";
 
 
 export default definePlugin({
     name: "MarkdownAPI",
-    description: "API to add/mod markdown rules",
+    description: "API to add/mod discord markdown rules",
     authors: [Devs.iamme],
     patches: [
         {
@@ -27,6 +27,5 @@ export default definePlugin({
                 replace: "let $1=Vencord.Api.Markdown.insertSlateRules($2)"
             }
         }
-    ],
-    startAt: StartAt.Init
+    ]
 });
