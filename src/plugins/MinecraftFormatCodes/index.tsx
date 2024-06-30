@@ -44,7 +44,7 @@ export default definePlugin({
                     order: 25,
                     requiredFirstCharacters: ["&"],
                     match(source, state, prev) {
-                        return /^&([\w\d])([^&]+)&r/.exec(source) || /^&([\w\d])([^&]+)/.exec(source);
+                        return /^&([\w\d])([\w\d\W\D]+)&r/.exec(source) || /^&([\w\d])([\w\d\W\D]+)/.exec(source);
                     },
                     parse(capture, nastedParse, state) {
                         return {
