@@ -24,7 +24,7 @@ interface Status { connectionStatus: string; connectionStatusText: string; }
 export default definePlugin({
     name: "pingping",
     description: "display ping instead of \"Voice Connected\" message",
-    authors: [Devs.Sqaaakoi],
+    authors: [Devs.iamme],
     patches: [
         {
             find: ".rtcConnectionStatusConnecting,",
