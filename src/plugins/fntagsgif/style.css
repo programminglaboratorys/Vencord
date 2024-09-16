@@ -1,0 +1,5 @@
+.tooltip {
+    height: fit-content;
+    width: fit-content;
+    visibility: inherit;
+}
