@@ -25,10 +25,11 @@ import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
-import { Button, Forms, React, TextInput, useState } from "@webpack/common";
+import { Button, Forms, React, TextArea, TextInput, useState } from "@webpack/common";
 
 const STRING_RULES_KEY = "TextReplaceEnchanted_rulesString";
 const REGEX_RULES_KEY = "TextReplaceEnchanted_rulesRegex";
+const SCRIPT_RULES_KEY = "TextReplaceEnchanted_rulesScript";
 
 type Rule = {
     find: string;
@@ -44,15 +45,17 @@ interface TextReplaceProps {
     update: () => void;
 }
 
-const makeEmptyRule: () => Rule = () => ({
+const makeEmptyRule: (isScript?: boolean) => Rule = (isScript?: boolean) => ({
     find: "",
     replace: "",
+    script: isScript ? "" : undefined,
     onlyIfIncludes: ""
 });
-const makeEmptyRuleArray = () => [makeEmptyRule()];
+const makeEmptyRuleArray = (isScript?: boolean) => [makeEmptyRule(isScript)];
 
 let stringRules = makeEmptyRuleArray();
 let regexRules = makeEmptyRuleArray();
+let scriptRules = makeEmptyRuleArray(true);
 
 const settings = definePluginSettings({
     replace: {
@@ -72,6 +75,12 @@ const settings = definePluginSettings({
                         title="Using Regex"
                         rulesArray={regexRules}
                         rulesKey={REGEX_RULES_KEY}
+                        update={update}
+                    />
+                    <TextReplace
+                        title="Using Scripts"
+                        rulesArray={scriptRules}
+                        rulesKey={SCRIPT_RULES_KEY}
                         update={update}
                     />
                     <TextReplaceTesting />
@@ -126,7 +135,8 @@ function Input({ initialValue, onChange, placeholder }: {
 }
 
 function TextReplace({ title, rulesArray, rulesKey, update }: TextReplaceProps) {
-    const isRegexRules = title === "Using Regex";
+    const isRegexRules = title === "Using String";
+    const isScriptRules = title === "Using Scripts";
 
     async function onClickRemove(index: number) {
         if (index === rulesArray.length - 1) return;
@@ -138,7 +148,7 @@ function TextReplace({ title, rulesArray, rulesKey, update }: TextReplaceProps) 
 
     async function onChange(e: string, index: number, key: string) {
         if (index === rulesArray.length - 1)
-            rulesArray.push(makeEmptyRule());
+            rulesArray.push(makeEmptyRule(isScriptRules));
 
         rulesArray[index][key] = e;
 
@@ -163,9 +173,9 @@ function TextReplace({ title, rulesArray, rulesKey, update }: TextReplaceProps) 
                                         initialValue={rule.find}
                                         onChange={e => onChange(e, index, "find")}
                                     />
-                                    {rule.script != null ? <Input
+                                    {rule.script != null ? <TextArea
                                         placeholder="Script"
-                                        initialValue={rule.script}
+                                        value={rule.script}
                                         onChange={e => onChange(e, index, "script")}
                                     /> : <Input
                                         placeholder="Replace"
@@ -196,7 +206,7 @@ function TextReplace({ title, rulesArray, rulesKey, update }: TextReplaceProps) 
                                     <DeleteIcon />
                                 </Button>
                             </Flex>
-                            {isRegexRules && renderFindError(rule.find)}
+                            {(isRegexRules || isScriptRules) && renderFindError(rule.find)}
                         </React.Fragment>
                     )
                 }
@@ -243,6 +253,21 @@ function applyRules(content: string): string {
         }
     }
 
+    if (scriptRules) {
+        for (const rule of scriptRules) {
+            if (!rule.find) continue;
+            if (!rule.script) continue;
+            if (rule.onlyIfIncludes && !content.includes(rule.onlyIfIncludes)) continue;
+            try {
+                const regex = stringToRegex(rule.find);
+                content = content.replace(regex, rule.script);
+            } catch (e) {
+                new Logger("TextReplace").error(`Invalid regex: ${rule.find}`);
+            }
+
+        }
+    }
+
     content = content.trim();
     return content;
 }
@@ -260,6 +285,7 @@ export default definePlugin({
     async start() {
         stringRules = await DataStore.get(STRING_RULES_KEY) ?? makeEmptyRuleArray();
         regexRules = await DataStore.get(REGEX_RULES_KEY) ?? makeEmptyRuleArray();
+        scriptRules = await DataStore.get(SCRIPT_RULES_KEY) ?? makeEmptyRuleArray();
 
         this.preSend = addPreSendListener((channelId, msg) => {
             // Channel used for sharing rules, applying rules here would be messy
