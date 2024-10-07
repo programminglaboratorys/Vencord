@@ -18,7 +18,6 @@
 
 import "./IconsTab.css";
 
-import { Margins } from "@utils/margins";
 import { Clickable, Forms, Icons, React, TextInput } from "@webpack/common";
 
 import { openIconModal } from "./IconModal";
@@ -503,7 +502,6 @@ function IconsTab() {
 
     return (
         <SettingsTab title="Icons">
-            <Forms.FormTitle className={Margins.top8} tag="h1">Discord Icons</Forms.FormTitle>
             <TextInput autoFocus value={search} placeholder="Search for an icon..." onChange={setSearch} />
             <RenderIcons search={search} />
         </SettingsTab>
