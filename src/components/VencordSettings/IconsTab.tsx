@@ -504,7 +504,7 @@ function IconsTab() {
     return (
         <SettingsTab title="Icons">
             <Forms.FormTitle className={Margins.top8} tag="h1">Discord Icons</Forms.FormTitle>
-            <TextInput autoFocus value={search} placeholder="Search for a plugin..." onChange={setSearch} />
+            <TextInput autoFocus value={search} placeholder="Search for an icon..." onChange={setSearch} />
             <RenderIcons search={search} />
         </SettingsTab>
     );
