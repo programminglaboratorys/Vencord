@@ -19,6 +19,7 @@
 import { Settings } from "@api/Settings";
 import BackupAndRestoreTab from "@components/VencordSettings/BackupAndRestoreTab";
 import CloudTab from "@components/VencordSettings/CloudTab";
+import IconsTab from "@components/VencordSettings/IconsTab";
 import PatchHelperTab from "@components/VencordSettings/PatchHelperTab";
 import PluginsTab from "@components/VencordSettings/PluginsTab";
 import ThemesTab from "@components/VencordSettings/ThemesTab";
@@ -128,6 +129,12 @@ export default definePlugin({
                 label: "Patch Helper",
                 element: PatchHelperTab,
                 className: "vc-patch-helper"
+            },
+            IS_DEV && {
+                section: "VencordDiscordIcons",
+                label: "Icons",
+                element: IconsTab,
+                className: "vc-discord-icons"
             },
             ...this.customSections.map(func => func(SectionTypes)),
             {
