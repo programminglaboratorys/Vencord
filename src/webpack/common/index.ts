@@ -18,6 +18,7 @@
 
 export * from "./classes";
 export * from "./components";
+export * from "./icons";
 export * from "./menu";
 export * from "./react";
 export * from "./stores";

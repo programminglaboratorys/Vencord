@@ -2,6 +2,11 @@
     margin-left: 5%;
 }
 
+.vc-icon-modal-codeblock {
+    margin-left: 5%;
+    white-space: nowrap;
+}
+
 .vc-icon-modal-main-container {
     display: flex;
 }
