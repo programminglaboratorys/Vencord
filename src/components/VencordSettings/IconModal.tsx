@@ -31,7 +31,6 @@ const cssColors = new Proxy(
         }
     }
 ) as unknown as Array<{ name: string; css: string; key: string; }>;
-// {"xxs":12,"xs":16,"sm":18,"md":24,"lg":32}
 const iconSizes = ["lg", "md", "sm", "xs", "xxs"].reverse();
 
 export type Icon = ComponentType<JSX.IntrinsicElements["svg"] & {
