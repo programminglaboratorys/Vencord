@@ -85,6 +85,3 @@ export function openIconModal(iconName: string, Icon: Icon) {
     openModal(props => <ModalComponent iconName={iconName} Icon={Icon} {...props} />);
 }
 
-
-
-// import { Clickable, Forms, Icons, React, TextInput } from "@webpack/common";
