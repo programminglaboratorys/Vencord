@@ -18,6 +18,7 @@
 
 import definePlugin from "@utils/types";
 
+import settings from "../_core/settings";
 import IconsTab from "./IconsTab";
 
 
@@ -26,28 +27,19 @@ export default definePlugin({
     description: "Adds a new tab to settings, to preview all icons",
     authors: [],
     dependencies: ["Settings"],
-    patches: [
-        {
-            find: "Messages.ACTIVITY_SETTINGS",
-            replacement: {
-                match: /(shouldMergeGameSettings.{0,10}return )(\i\.useMemo\(\(\)=>\i\(.{0,10}\i,\i\]\))/,
-                replace: (_, rest, settingsHook) => `${rest}$self.wrapSettingsHook(${settingsHook})`
-            }
-        }
-    ],
-
-    wrapSettingsHook(elements: Record<string, unknown>[]) {
-        const elementIndex = elements.findIndex(
-            ({ section }) =>
-                section === (!IS_DEV ? "VencordSettingsSync" : "VencordPatchHelper")
-        );
-        if (elementIndex !== -1)
-            elements.splice(elementIndex + 1, 0, {
-                section: "VencordDiscordIcons",
-                label: "Icons",
-                element: IconsTab,
-                className: "vc-discord-icons"
-            });
-        return elements;
+    insertSettings() {
+        return {
+            section: "VencordDiscordIcons",
+            label: "Icons",
+            element: IconsTab,
+            className: "vc-discord-icons"
+        };
     },
+    start() {
+        console.log(settings);
+        settings.customSections.push(this.insertSettings);
+    },
+    stop() {
+        settings.customSections = settings.customSections.filter(x => x !== this.insertSettings);
+    }
 });
