@@ -18,11 +18,13 @@
 
 import "./IconsTab.css";
 
+import { Logger } from "@utils/Logger";
 import { Clickable, Forms, Icons, React, TextInput } from "@webpack/common";
 
 import { openIconModal } from "./IconModal";
 import { SettingsTab, wrapTab } from "./shared";
-// findByProps("colors", "layout")
+const logger = new Logger("IconsTab");
+
 
 const IconNames = [
     "AIcon",
@@ -484,6 +486,7 @@ function RenderIcons({ search }: { search: string; }) {
             return searchKeywords.every(keyword => words.includes(keyword)) || words.every(keyword => searchKeywords.includes(keyword)) || name.toLowerCase().includes(search.toLowerCase());
         }).map(iconName => {
             const Icon = Icons[iconName];
+            if (!Icon) return logger.warn(`Icon ${iconName} not found!`) ?? null;
             return <React.Fragment key={iconName}>
                 <div className="vc-icon-box">
                     <Clickable onClick={() => openIconModal(iconName, Icon as any)}>

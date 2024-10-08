@@ -30,7 +30,6 @@ const cssColors = new Proxy(
         }
     }
 ) as unknown as Array<{ name: string; css: string; key: string; }>;
-// {"xxs":12,"xs":16,"sm":18,"md":24,"lg":32}
 const iconSizes = ["lg", "md", "sm", "xs", "xxs"].reverse();
 
 export type Icon = ComponentType<JSX.IntrinsicElements["svg"] & {
@@ -58,7 +57,6 @@ function ModalComponent(props) {
         };
     }, [onKeyDown]);
     const { iconName, Icon }: { iconName: string; Icon: Icon; } = props;
-    // <CodeBlock lang="ts" content={`import { Icons } from "@webpack/common";\nconst ${iconName} = () => <Icons.${iconName} />;`} />
     return (<ModalRoot {...props} size={ModalSize.MEDIUM}>
         <ModalHeader>
             <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>{`${iconName} - ${cssColors[color]?.name ?? "unknown"}`}</Text>
