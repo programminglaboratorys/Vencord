@@ -22,7 +22,7 @@ import IconsTab from "./IconsTab";
 
 
 export default definePlugin({
-    name: "Icons",
+    name: "IconViewer",
     description: "Adds a new tab to settings, to preview all icons",
     authors: [],
     dependencies: ["Settings"],

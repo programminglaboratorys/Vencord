@@ -14,7 +14,7 @@ import {
 } from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
 import { Text, TooltipContainer, useCallback, useEffect, useState } from "@webpack/common";
-import { ComponentType } from "react";
+import * as t from "@webpack/types";
 
 const Colors = findByPropsLazy("colors", "layout");
 const cssColors = new Proxy(
@@ -31,11 +31,6 @@ const cssColors = new Proxy(
     }
 ) as unknown as Array<{ name: string; css: string; key: string; }>;
 const iconSizes = ["lg", "md", "sm", "xs", "xxs"].reverse();
-
-export type Icon = ComponentType<JSX.IntrinsicElements["svg"] & {
-    size?: "xxs" | "xs" | "sm" | "md" | "lg";
-    colorClass?: string;
-} & Record<string, any>>;
 
 
 function ModalComponent(props) {
@@ -56,7 +51,7 @@ function ModalComponent(props) {
             document.removeEventListener("keydown", onKeyDown);
         };
     }, [onKeyDown]);
-    const { iconName, Icon }: { iconName: string; Icon: Icon; } = props;
+    const { iconName, Icon }: { iconName: string; Icon: t.Icon; } = props;
     return (<ModalRoot {...props} size={ModalSize.MEDIUM}>
         <ModalHeader>
             <Text variant="heading-lg/semibold" style={{ flexGrow: 1 }}>{`${iconName} - ${cssColors[color]?.name ?? "unknown"}`}</Text>
@@ -81,7 +76,7 @@ function ModalComponent(props) {
     </ModalRoot>);
 }
 
-export function openIconModal(iconName: string, Icon: Icon) {
+export function openIconModal(iconName: string, Icon: t.Icon) {
     openModal(props => <ModalComponent iconName={iconName} Icon={Icon} {...props} />);
 }
 
