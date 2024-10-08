@@ -45,7 +45,7 @@ function RenderIcons({ search }: { search: string; }) {
         }}
     >
         {Object.entries(Icons).map(([iconName, Icon]) =>
-            !searchMatch(search, iconName) && <React.Fragment key={iconName}>
+            searchMatch(search, iconName) && <React.Fragment key={iconName}>
                 <div className="vc-icon-box">
                     <Clickable onClick={() => openIconModal(iconName, Icon)}>
                         <div className="vc-icon-container">
