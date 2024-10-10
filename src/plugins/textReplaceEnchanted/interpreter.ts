@@ -21,8 +21,8 @@ export const rules: { [k: string]: [(...args: any) => any, Array<string>, boolea
 
     "user": [() => UserStore.getCurrentUser(), ["globalName", "username", "discriminator", "id"], false],
     "encode_url": [url => encodeURI(url), [], true],
-    "current_channel": [() => ChannelStore.getChannel(SelectedChannelStore.getChannelId()), ["name", "id"], false],
-    "current_guild": [() => GuildStore.getGuild(SelectedGuildStore.getGuildId()), ["name", "id"], false],
+    "current_channel": [() => ChannelStore.getChannel(SelectedChannelStore.getChannelId()), ["name", "id", "lastPinTimestamp", "topic_"], false],
+    "current_guild": [() => GuildStore.getGuild(SelectedGuildStore.getGuildId()), ["name", "id", "joinedAt", "description", "ownerId", "rulesChannelId"], false],
     "guild_count": [() => GuildStore.getGuildCount(), [], false],
     "channel": [(id: string) => ChannelStore.getChannel(id), ["name", "id", "lastPinTimestamp", "topic_"], true],
     "guild": [(id: string) => GuildStore.getGuild(id), ["name", "id", "joinedAt", "description", "ownerId", "rulesChannelId"], true],
