@@ -27,6 +27,8 @@ import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType } from "@utils/types";
 import { Button, Forms, React, TextArea, TextInput, useState } from "@webpack/common";
 
+import { Interpreter } from "./interpreter";
+
 const STRING_RULES_KEY = "TextReplaceEnchanted_rulesString";
 const REGEX_RULES_KEY = "TextReplaceEnchanted_rulesRegex";
 const SCRIPT_RULES_KEY = "TextReplaceEnchanted_rulesScript";
@@ -260,7 +262,12 @@ function applyRules(content: string): string {
             if (rule.onlyIfIncludes && !content.includes(rule.onlyIfIncludes)) continue;
             try {
                 const regex = stringToRegex(rule.find);
-                content = content.replace(regex, rule.script);
+                let match: RegExpExecArray | null;
+                if ((match = regex.exec(content)) === null) continue;
+                const i = new Interpreter({});
+                const results = i.interpret(rule.script).results == null ? match[0] : i.interpret(rule.script).results;
+                if (!results) continue;
+                content = content.replace(regex, String(results));
             } catch (e) {
                 new Logger("TextReplace").error(`Invalid regex: ${rule.find}`);
             }
