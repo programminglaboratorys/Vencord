@@ -24,9 +24,9 @@ class Executor {
     parse(args) {
         if (!args) return [];
         return args.map((arg) => {
-            if (arg[0] === '"' && arg[arg.length - 1] === '"') {
-                return arg.slice(1, arg.length - 1);
-            } else if (arg[0] === "$") {
+            if (arg.startsWith('"') && arg.endsWith('"')) {
+                return arg.slice(1, -1);
+            } else if (arg.startsWith("$")) {
                 const variable = arg.slice(1);
                 return this.env[variable];
             }
@@ -56,11 +56,14 @@ class Interpreter {
                 break;
             case "echo":
                 const fn = this.executor[command];
-                if (!fn) return console.log(`Unknown command: ${command}`);
+                if (!fn)
+                    return console.log(
+                        `Unknown command: ${command}. function not found`
+                    );
                 fn(args);
                 break;
             default:
-                console.log(`Unknown command: ${command}`);
+                console.error(`Unknown command: ${command}`);
         }
     }
 
@@ -70,7 +73,7 @@ class Interpreter {
 
         for (let index = 0; index < lines.length; index++) {
             const line = lines[index];
-            if (!line) continue;
+            if (!line && line.startWith("#")) continue;
             const args = line.match(cmd) || [];
             if (args[0] === "stop") break;
             this.execute(args[0], this.executor.parse(args.slice(1)));
