@@ -264,7 +264,7 @@ function applyRules(content: string): string {
                 const regex = stringToRegex(rule.find);
                 let match: RegExpExecArray | null;
                 if ((match = regex.exec(content)) === null) continue;
-                const i = new Interpreter({});
+                const i = new Interpreter(match);
                 const results = i.interpret(rule.script).results == null ? match[0] : i.interpret(rule.script).results;
                 if (!results) continue;
                 content = content.replace(regex, String(results));
