@@ -157,3 +157,35 @@ del l
 const i = new Interpreter({});
 i.interpret(code);
 */
+/**
+ * Interpreter
+ *
+ * The interpreter is the core of the text replacement engine. It takes a string
+ * of commands and executes them one by one. The commands are separated by newline
+ * characters.
+ *
+ * The interpreter has a set of built-in commands that can be used to manipulate
+ * the environment. The commands are:
+ * * `echo <string>`: prints the given string to the console
+ * * `set <name> <value>`: sets a variable in the environment
+ * * `del <name>`: deletes a variable from the environment
+ * * `debug`: prints the current state of the environment
+ * * `return <string>`: returns the given string from the script
+ *
+ * Expressions
+ *
+ * Expressions are a way to access discord variables and functions in the
+ * interpreter. An expression is a string that is surrounded by ${} and can
+ * contain any valid variable name or function name. The expression is evaluated
+ * and the result is added to the args array.
+ *
+ * Example of expression: ${user.username}
+ *
+ * The rules structure explains the attributes and if the thing is callable,
+ * first argument is the function, second is the attributes and third is boolean
+ * saying if its callable or not.
+ *
+ * How to call in an expression: ${encode_url($1)}
+ * $1 gets the first match of the regex, ${encode_url()} is the expression to call
+ * encode_url and $1 passed to the function
+*/
