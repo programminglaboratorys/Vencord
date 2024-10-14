@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Icons } from "@webpack/common";
 import { Message } from "discord-types/general";
@@ -24,12 +23,12 @@ import { Message } from "discord-types/general";
 export default definePlugin({
     name: "PinIcon",
     description: "Adds a pin icon to pinned messages",
-    authors: [Devs.Ven],
+    authors: [],
     patches: [
         {
             find: ".Messages.MESSAGE_EDITED,",
             replacement: {
-                match: /(children:\[null!=\i.+?(?:[^\]]*[\]]){2}[^\]]+)/,
+                match: /(children:\[null!=\i.+?(?:[^}]*[}]){3}\))/,
                 replace: "$1,$self.PinnedIcon(arguments[0].message)"
             }
         }
