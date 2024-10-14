@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { Icons } from "@webpack/common";
 import { Message } from "discord-types/general";
@@ -23,7 +24,7 @@ import { Message } from "discord-types/general";
 export default definePlugin({
     name: "PinIcon",
     description: "Adds a pin icon to pinned messages",
-    authors: [],
+    authors: [Devs.iamme],
     patches: [
         {
             find: ".Messages.MESSAGE_EDITED,",
