@@ -477,10 +477,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "Sqaaakoi",
         id: 259558259491340288n
     },
-    iamme: {
-        name: "i am me",
-        id: 984392761929256980n
-    },
     Byron: {
         name: "byeoon",
         id: 1167275288036655133n
@@ -916,6 +912,10 @@ export const EquicordDevs = Object.freeze({
     arHSM: {
         name: "arHSM",
         id: 841509053422632990n
+    },
+    iamme: {
+        name: "i am me",
+        id: 984392761929256980n
     },
     creations: {
         name: "Creation's",
