@@ -29,7 +29,7 @@ export default definePlugin({
         {
             find: "Messages.MESSAGE_EDITED,",
             replacement: {
-                match: /(Messages\.MESSAGE_EDITED,(?:[^}]*[}]){3}\))/,
+                match: /Messages\.MESSAGE_EDITED,(?:[^}]*[}]){3}\)/,
                 replace: "$&,$self.PinnedIcon(arguments[0].message)"
             }
         }
