@@ -21,7 +21,7 @@ import "./style.css";
 import { definePluginSettings } from "@api/Settings";
 import { getUserSettingLazy } from "@api/UserSettings";
 import ErrorBoundary from "@components/ErrorBoundary";
-import { Devs } from "@utils/constants";
+import { EquicordDevs } from "@utils/constants";
 import { classes } from "@utils/misc";
 import { useForceUpdater } from "@utils/react";
 import definePlugin, { OptionType, StartAt } from "@utils/types";
@@ -126,7 +126,7 @@ const StatusSubMenuComponent = () => {
 export default definePlugin({
     name: "StatusPresets",
     description: "Allows you to remember your statuses and set them later",
-    authors: [Devs.iamme],
+    authors: [EquicordDevs.iamme],
     settings: settings,
     dependencies: ["UserSettingsAPI"],
     patches: [
