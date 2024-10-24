@@ -27,6 +27,7 @@ import { EXTENSION_BASE_URL } from "../src/utils/web-metadata";
 import { getTheme, Theme } from "../src/utils/discord";
 import { getThemeInfo } from "../src/main/themes";
 import { Settings } from "../src/Vencord";
+import { externalFetch } from "../src/utils/externalFetch";
 
 // Discord deletes this so need to store in variable
 const { localStorage } = window;
@@ -110,4 +111,7 @@ window.VencordNative = {
     },
 
     pluginHelpers: {} as any,
+
+    // @ts-ignore
+    externalFetch: externalFetch
 };

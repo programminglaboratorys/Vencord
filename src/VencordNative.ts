@@ -7,6 +7,7 @@
 import { PluginIpcMappings } from "@main/ipcPlugins";
 import type { UserThemeHeader } from "@main/themes";
 import { IpcEvents } from "@shared/IpcEvents";
+import { externalFetch } from "@utils/externalFetch";
 import { IpcRes } from "@utils/types";
 import type { Settings } from "api/Settings";
 import { ipcRenderer } from "electron";
@@ -73,5 +74,8 @@ export default {
         openExternal: (url: string) => invoke<void>(IpcEvents.OPEN_EXTERNAL, url)
     },
 
-    pluginHelpers: PluginHelpers
+    pluginHelpers: PluginHelpers,
+
+    ...PluginHelpers.MainNative,
+    externalFetch: externalFetch
 };

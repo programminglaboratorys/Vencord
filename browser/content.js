@@ -16,8 +16,32 @@ document.addEventListener(
             meta: {
                 EXTENSION_VERSION: browser.runtime.getManifest().version,
                 EXTENSION_BASE_URL: browser.runtime.getURL(""),
-            }
+            },
         });
     },
     { once: true }
 );
+
+async function fetchRequest(rq, callback) {
+    try {
+        const response = await fetch(rq.url, rq.request);
+        callback(response);
+    } catch (err) {
+        callback({ error: err.message });
+        console.error("Vencord extension error:", err);
+    }
+}
+
+browser.runtime.onMessageExternal.addListener(async function (
+    message,
+    sender,
+    sendResponse
+) {
+    switch (message.cmd) {
+        case "request":
+            await fetchRequest(message.data, sendResponse);
+            return;
+        default:
+            sendResponse({ error: "Unknown command" });
+    }
+});

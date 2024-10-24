@@ -72,7 +72,7 @@ const globNativesPlugin = {
             const pluginDirs = ["plugins", "userplugins"];
             let code = "";
             let natives = "\n";
-            let i = 0;
+            let i = 1;
             for (const dir of pluginDirs) {
                 const dirPath = join("src", dir);
                 if (!await exists(dirPath)) continue;
@@ -93,7 +93,9 @@ const globNativesPlugin = {
                     i++;
                 }
             }
-            code += `export default {${natives}};`;
+            code += `import * as MainNative from "./main/native";\n`;
+            natives += `MainNative: MainNative,\n`;
+            code += `export default {${natives}}`;
             return {
                 contents: code,
                 resolveDir: "./src"
